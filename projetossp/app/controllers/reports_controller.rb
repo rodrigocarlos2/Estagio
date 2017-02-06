@@ -34,6 +34,14 @@ class ReportsController < ApplicationController
   # GET /reports/1.json
   def show
     authorize :report, :show?
+    if params[:finalizar]
+      @resquest_criminal.status = 2
+      @resquest_criminal.save
+    end
+    respond_to do |format|
+      format.html
+      format.pdf {render template: 'reports/report_pdf', pdf: "laudo-#{@report.id}-#{@report.updated_at}"}
+    end
   end
 
   # GET /reports/new
