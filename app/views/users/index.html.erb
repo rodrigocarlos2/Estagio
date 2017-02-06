@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<br>
+
+<h1><%= t(".title")%></h1>
+
+<br>
+
+<%= search_form_for @q do |f| %>
+          <div class="ui icon action input">
+            <i class="search icon"></i>
+            <%= f.search_field :name_cont, placeholder: 'Nome' do %>
+            <%# Pesquisa que passa pela tabela User para conseguir o nome do Perito %>
+            <% end %>
+            <%= f.submit 'Procurar', class:'ui blue submit button' %>
+          </div>
+<% end %>
+
+<table class="ui blue table">
+  <thead>
+    <tr>
+      <th>E-mail</th>
+      <th>Nome</th>
+      <th>Aprovado</th>
+      <th colspan="6"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        
+          <td><%= user.email %></td>
+          <td><%= user.name %></td>
+          <% if user.approved %>
+          <td>Sim</td>
+          <td><%= link_to 'Desaprovar usuário', change_approved_path(user), class: 'ui tiny blue basic button ' %></td>
+          <% else %>
+          <td>Não</td>
+          <td><%= link_to 'Aprovar usuário', change_approved_path(user), class: 'ui tiny blue basic button ' %></td>
+          <% end %>
+        <td><%= link_to 'Editar', edit_user_path(user), class: 'ui tiny blue basic button ' %></td>
+        <td><%= link_to 'Ver', user, class: 'ui tiny blue basic button ' %></td>
+        <td><%= link_to 'Excluir', user, method: :delete, data: { confirm: 'Você tem certeza?'}, class: 'ui tiny red basic button ' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br><br>

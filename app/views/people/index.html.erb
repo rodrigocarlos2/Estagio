@@ -1,0 +1,69 @@
+
+<br>
+
+<h1 class"ui header">Lista de Pessoas</h1>
+
+  <%= search_form_for @q do |f| %>
+          <div class="ui icon action input">
+            <i class="search icon"></i>
+            <%= f.search_field :name_cont, placeholder: 'Nome' do %>
+            <% end %>
+            <%= f.submit 'Procurar', class:'ui blue submit button' %>
+          </div>
+  <% end %>
+
+  <table class='ui blue table '>
+  <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Cpf</th>
+        <th>Telefone</th>
+        <th>Telefone celular</th>
+        <th colspan="3"></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <% @people.each do |person| %>
+        <tr>
+          <td>
+            <h4 class="ui image header">
+              <%= image_tag(person.photo_url(:thumb), class: 'ui rounded image perfil') if person.photo? %>
+              <div class="content">
+                <%= person.name %>
+              </div>
+            </h4>
+          </td>
+          <td><%= person.cpf %></td>
+          <td><%= person.phone %></td>
+          <td><%= person.cell_phone %></td>
+          <td><%= link_to 'Ver', person, class: 'ui tiny blue basic button' %></td>
+
+          <% if policy(:person).edit? %>
+
+            <td><%= link_to 'Editar', edit_person_path(person), class: 'ui tiny blue basic button' %></td>
+
+          <% end %>
+
+          <% if policy(:person).destroy? %>
+
+          <td><%= link_to 'Excluir', person, method: :delete, class: 'ui tiny basic red button', data: { confirm: 'Você tem certeza?' } %></td>
+
+          <% end %>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= will_paginate @people, :semantic => true, renderer: WillPaginateSemanticUi::ActionView::Renderer %>
+
+  <br>
+  <br>
+
+  <% if policy(:person).create? %>
+
+  <%= link_to 'Nova Pessoa', new_person_path, class: 'ui primary button' %>
+
+  <% end %>
